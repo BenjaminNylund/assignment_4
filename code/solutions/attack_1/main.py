@@ -31,7 +31,7 @@ def send_post_request(data):
                 print("JSON response content:")
                 print(response_data)
 
-                # Extract and print total_time from JSON response
+                # Extract and print total_time from response
                 total_time = response_data.get('total_time') if response_data else None
                 if total_time is not None:
                     print(f"Total Time: {total_time}")
