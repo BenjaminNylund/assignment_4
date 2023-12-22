@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "ikt-222-solution"
+version = "0.1.0"
+description = "Assignment 4 - Infiltrating the Governme…"
+authors = ["Benjamin Nylund <benjaminn@uia.no>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
