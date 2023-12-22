@@ -1,6 +1,6 @@
 # Assignment 4 - Infiltrating the Government in an Alternative Universe
 
-- [ ] Vulnerable Function Used to Evaluate Password
+- [x] Vulnerable Function Used to Evaluate Password
 - [x] Intranet: Level 1
 - [ ] Intranet: Level 2
 - [ ] SSH
